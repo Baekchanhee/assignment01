@@ -19,30 +19,26 @@
 
 
 \begin{document}
-
 \title{GIT 사용법}
 \author{20142503 백찬희}
-\date{\today}
+
 \maketitle
 
 \section{GIT이란?}
-
 버전관리 시스템 중 하나로 파일 변화를 시간에 따라 버전으로 기록했다가 나중에 특정 시점의 버전을 다시 꺼내올 수 있는 시스템이다. 
 저장한 버전들을 이용해 파일을 이전 상태로 되돌리거나 시간에 따라 수정 내용을 비교하거나 누가 문제를 일으켰는지 누가 언제 만들었는지 등을 알 수 있다. 
 
-
 \section{설치방법}
-
 \href{https://git-scm.com/}{https://git-scm.com/}에서 해당하는 \textit{OS}에 맞게 설치를 한다. 설치 파일 중 \textbf{git bash}를 이용하면 \textit{Windows}에서 \textit{Linux}, \textit{MacOS}와 같은 환경에서 \textbf{GIT}을 사용할 수 있다. 아래에 적혀있는 모든 명령어는 \textbf{git bash}에서 작성한 것이다.
 
 \section{GIT 초기설정}
-
 버전관리를 원하는 프로젝트 디렉토리 들어간 뒤 다음과 같은 명령어를 입력한다.
 \begin{verbatim}
 git init
 \end{verbatim} 
 위의 명령어를 통해 현재 디렉토리가 버전관리 되는 저장소로 선언한 것이다.
-\\\\만약 이미 \textit{github.com}과 같은 원격저장소가 이미 존재하는 경우에는 다음 명령어를 통해 로컬저장소로 파일들을 그대로 가져올수 있다.
+\\\\
+만약 이미 \textit{github.com}과 같은 원격저장소가 이미 존재하는 경우에는 다음 명령어를 통해 로컬저장소로 파일들을 그대로 가져올수 있다.
 \begin{verbatim}
 git clone 해당URL
 \end{verbatim} 
@@ -69,6 +65,7 @@ git config --global user.email 해당이메일
                 7.GIT의 원리에서 더 자세히 설명
         }
 \end{figure}
+
 \section{버전 만들기}
 버전을 만들기 위해서는 버전관리의 대상으로 설정하고 싶은 파일들을 다음 명령으로 \textbf{staging area}(그림 참고)에 올린다.
 \begin{verbatim}
@@ -231,7 +228,7 @@ git revert '버전해쉬값'
 \section{GIT의 원리}
 Figure 1에 있는 \textbf{working directory}, \textbf{staging area}, \textbf{repository}가 실제로 어떤 것인지 알아보겠다.
 \\\\\textbf{working directory}는 git init을 했던 프로젝트 디렉토리이다. 프로젝트 파일을 생성, 수정을 하면 working directory에서만 반영되는 것이다. git add을 해야 staging area에 올라가 버전에 등록할 수 있다. 
-\\심지어 프로젝트 파일을 삭제하면 working directory에서 바로 삭제가 이루어지지만, staging area와 repository에는 파일이 그대로 남아있다. \\만약 working directory와 staging area가 구분되지 않았더라면 불필요한 파일까지 버전관리가 되는 상황이 발생하기 때문에 이처럼 분리를 했다.
+\\심지어 프로젝트 파일을 삭제하면 working directory에서 바로 삭제가 이루어지지만, staging area와 repository에는 파일이 그대로 남아있다. \\만약 working directory와 staging area가 구분되지 않았더라면 불필요한 파일까지 버전관리가 되는 상황이 발생한다.
 \clearpage
 \textbf{staging area}는 git init을 했을 때 생성된 \textit{.git} 디렉토리 내부 \textit{index} 파일을 나타내는 것이다. index 파일 내부에는 git add를 한 파일만 등록이 이루어진다. \\index 파일에 파일의 내용이 직접 저장되는 것이 아니라 파일의 내용을 SHA-1 해쉬함수를 거쳐 해쉬값들의 목록을 저장한다. \\해쉬함수는 일방향 함수로 파일의 내용이 같으면 똑같은 해쉬값을 출력한다. 따라서 파일의 내용이 같으면 해쉬값도 같기 때문에 변경이 없다는 것을 알 수 있고 파일의 내용이 달라지면 해쉬값 또한 달리지기 때문에 변경이 있다는 것을 알 수 있다. \\ 실제 파일은 blob object 형태로 저장되며 해쉬값을 주소처럼 이용해 해당 object를 쉽게 찾을 수 있다.
 \begin{figure}[ht] 
@@ -265,8 +262,45 @@ Figure 1에 있는 \textbf{working directory}, \textbf{staging area}, \textbf{re
         }
 \end{figure}
 
-\section{원격저장소와 동기화하기}
-원격저장소는 소스코드와 버전을 백업하고, 다른 사람과 협업을 하기 위한 핵심적인 기능이다. 원격저장소로 정말 유명한 \textbf{Github}말고도 내 컴퓨터의 다른 드라이브를 원격저장소로 사용할 수 있고 서버컴퓨터를 원격저장소로 사용할 수도 있다. 하지만 그 중에서 Github에 원격저장소를 만들고 지역저장소에 있는 파일들을 올려보겠다.   
+\section{원격저장소와 연결하기}
+원격저장소는 소스코드와 버전을 백업하고, 다른 사람과 협업을 하기 위한 핵심적인 기능이다. 원격저장소로 정말 유명한 \textbf{Github}말고도 내 컴퓨터의 다른 드라이브를 원격저장소로 사용할 수 있고 서버컴퓨터를 원격저장소로 사용할 수도 있다. 하지만 그 중에서 Github에 원격저장소를 만들고 지역저장소에 있는 파일들을 올려보겠다. 
+\\ 우선 Github에 저장소를 만든 뒤 로컬저장소에서 다음과 같은 명령을 입력한다.
+\begin{verbatim}
+git remote add origin 원격저장소URL
+\end{verbatim}
+이 명령은 로컬저장소에 원격저장소를 연결시키고 주소가 기니깐 origin이라는 별명을 부여한 것이다.
+\\다음과 같은 명령을 입력하면 원격저장소 연결이 잘 됬는지 확인할 수 있다.
+\begin{verbatim}
+git remote -v 
+\end{verbatim}
+원격저장소를 연결시켰으면 파일을 원격저장소를 보내기 위해 다음과 같은 명령어를 입력한다.
+\begin{verbatim}
+git push -u origin master 
+\end{verbatim}
+origin 별명의 원격저장소에 파일을 보내는 것이다. master는 branch 개념과 관련된 것인데 당장 필요한 개념은 아니라서 나중에 좀 더 공부한 뒤 채워넣겠다. 일단 master branch만 사용한다고 생각하면 된다.
+\\\\만약 403 error가 발생하면 http주소를 ssh주소로 바꿔주면 된다.
+\begin{verbatim}
+git remote set-url origin ssh주소
+\end{verbatim}
+협업을 한다는 상황을 가정하고 원격저장소의 다른 사람들이 commit한 최신 정보를 불러오기 위해선 다음과 같은 명령을 사용한다.
+\begin{verbatim}
+git pull
+\end{verbatim}
+
+\begin{figure}[ht] 
+        % read manual to see what [ht] means and for other possible options
+        \centering \includegraphics[width=0.8\columnwidth]{github}
+        % note that in above figure file name, "sr_setup",
+        % the file extension is missing. LaTeX is smart enough to find
+        % apropriate one (i.e. pdf, png, etc.)
+        % You can add this extention yourself as it seen below
+        % both notations are correct but above has more flexibility
+        %\includegraphics[width=1.0\columnwidth]{sr_setup.pdf}
+         \caption{
+                \label{fig:github}  
+                20142503 백찬희
+        }
+\end{figure}
 
 
 
@@ -282,23 +316,7 @@ Figure 1에 있는 \textbf{working directory}, \textbf{staging area}, \textbf{re
 
 
 
-
-
-\begin{thebibliography}{99}
-
-\bibitem{melissinos}
-A.~C. Melissinos and J. Napolitano, \textit{Experiments in Modern Physics},
-(Academic Press, New York, 2003).
-
-\bibitem{Cyr}
-N.\ Cyr, M.\ T$\hat{e}$tu, and M.\ Breton,
-% "All-optical microwave frequency standard: a proposal,"
-IEEE Trans.\ Instrum.\ Meas.\ \textbf{42}, 640 (1993).
-
-\bibitem{Wiki} \emph{Expected value},  available at
-\texttt{http://en.wikipedia.org/wiki/Expected\_value}.
-
-\end{thebibliography}
+\href{https://github.com/Baekchanhee/assignment01.git}{https://github.com/Baekchanhee/assignment01.git}
 
 
 \end{document}
